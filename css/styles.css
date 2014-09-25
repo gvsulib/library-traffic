@@ -1,0 +1,37 @@
+html,body{
+	font-family: sans-serif;
+	color: black;
+}
+h1,h2,h3,h4,h5{
+	color: #004875;
+}
+
+input.error, select.error {
+	border: 2px solid #f99 !important;
+}
+
+input.error:focus, select.error:focus { 
+	outline: none;
+	border-color: #f00;
+	box-shadow: 0 0 10px #f00;
+}
+label.error {
+	display: block;
+}
+textarea{
+	min-width: 400px;
+}
+
+.100 {
+	width: 100px;
+}
+/**
+* This, for some reason, is required to show the select boxes at a more clickable height in (mobile) Safari and Chrome.
+*/
+@media screen and (-webkit-min-device-pixel-ratio:0) {  /*safari and chrome*/
+    select {
+        height:30px;
+        line-height:30px;
+        background:#f4f4f4;
+    } 
+}

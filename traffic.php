@@ -1,8 +1,8 @@
-<?
-include 'connection.php';
+<?php
+date_default_timezone_set ("America/Detroit");
+include 'connection.php'
 if ($_GET) {
 	$confirm = "";
-	date_default_timezone_set ("America/Detroit");
 	
 	$query = "SELECT ID, name FROM space_labels";
 
@@ -62,14 +62,10 @@ if ($_GET) {
 }
 ?>
 <HTML>
-
-<HEAD>
-
-<link rel="stylesheet" type="text/css" href="http://gvsu.edu/cms3/assets/741ECAAE-BD54-A816-71DAF591D1D7955C/libui.css" />
-
-</HEAD>
-
-<BODY>
+	<HEAD>
+		<link rel="stylesheet" type="text/css" href="http://gvsu.edu/cms3/assets/741ECAAE-BD54-A816-71DAF591D1D7955C/libui.css" />
+	</HEAD>
+	<BODY>
 
 <?php
 
