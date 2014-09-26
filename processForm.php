@@ -2,21 +2,20 @@
 include 'includes.php';
 $errorMessages['badForm'] = "Error retreiving data from form. Call Jon.";
 
-$insertQueries['entry'] = "INSERT INTO entries (time, `use`, entryID, initials) VALUES (?, 1, NULL, ?);";
-$insertQueries['spaceUse'] = "INSERT INTO spaceuse (entryID,spaceID, groups, alone, individual, whiteboard, computers) " .
-                             "VALUES (?,?,?,?,?,?,?);";
-$insertQueries['traffic'] = "INSERT INTO traffic (level, entryID, space, noise, comments) VALUES (?,?,?,?,?);";
+$insertQueries['entry'] = "INSERT INTO entries (time, `use`, entryID, initials) VALUES (?, ?, NULL, ?);";
+$insertQueries['spaceUse'] = "INSERT INTO spaceuse (entryID,spaceID, groups, alone, individual, whiteboard, computers, noise) " .
+    "VALUES (?,?,?,?,?,?,?,?);";
+$insertQueries['traffic'] = "INSERT INTO traffic (level, entryID, space,  comments) VALUES (?,?,?,?);";
 
 //$errors will hold the errors to be displayed on page.
 $errors;
 $data;
-if (!$_POST){
+if (!$_POST) {
     $errors[] = $errorMessages['badForm'];
-}
-else{
-    foreach($_POST as $field => $value){
+} else {
+    foreach ($_POST as $field => $value) {
         $fieldInfo = explode("_", $field);
-        switch (count($fieldInfo)){
+        switch (count($fieldInfo)) {
             case 1: //initials, formType
                 $data[$field] = $value;
                 break;
@@ -33,37 +32,38 @@ else{
     }
 }
 processFormData($data);
-function processFormData($data){
+function processFormData($data)
+{
     global $con, $insertQueries;
     $formType = $data['formType'];
-    $entryID = getEntryID($data['initials']);
-    for ($i = 1; $i < count($data); $i++){
+    $entryID = getEntryID($data['initials'], $formType == 'spaceUse');
+    for ($i = 1; $i < count($data); $i++) {
         $space = getSpaceFromData($data, $i);
-        if ($space['use'] === true){
+        if ($formType == "spaceUse" && $space['use'] === true) {
             insertSpaceUse($space, $entryID);
         }
         insertSpaceTraffic($space, $entryID);
     }
+
 }
 
-function getSpaceFromData($data, $spaceID){
-    
-    if ($data[$spaceID]['collab']){
-        $space['use'] = true;
-    }
+function getSpaceFromData($data, $spaceID)
+{
     $space['spaceID'] = $spaceID;
     $space['whiteboard'] = 0; //default
     $space['computers'] = 0; //default
-    foreach($data[$spaceID] as $field => $value){
-        echo $field . " -> " . $value . "\n";
-        if (count($value) == 1){ //not collab
-            if ($field == 'computers'){
-                $value = $value ? 1 : 0;
-            }
-            $space[$field] = $value;
-        } else {
-            foreach($value as $collab => $collabValue){
-                $space[$collab] = $collabValue;
+    if ($spaceID < count($data) - 1) {
+        foreach ($data[$spaceID] as $field => $value) {
+            echo $spaceID;
+            if (count($value) == 1) { //not collab
+                if ($field == 'computers') {
+                    $value = $value ? 1 : 0;
+                }
+                $space[$field] = $value;
+            } else {
+                foreach ($value as $collab => $collabValue) {
+                    $space[$collab] = $collabValue;
+                }
             }
         }
     }
@@ -75,14 +75,15 @@ function getSpaceFromData($data, $spaceID){
  * @param String $initials Initials of the user
  * @return Integer new entryID
  */
-function getEntryID($initials){
+function getEntryID($initials, $use)
+{
     global $con, $insertQueries;
+    $use = $use ? 1 : 0;
     $time = date('Y-m-d h:i:s');
     $query = $con->prepare($insertQueries['entry']);
-    print_r($con);
-    $query->bind_param('ss', $time, $initials);
+    $query->bind_param('sis', $time, $use, $initials);
     $query->execute();
-    echo "entryID = " . $con->insert_id . "\n";
+    $query->execute();
     return $con->insert_id;
 }
 
@@ -91,11 +92,12 @@ function getEntryID($initials){
  * @param Array $space representation of a space
  * @param Integer $entryID id of the entry
  */
-function insertSpaceUse($space, $entryID){
+function insertSpaceUse($space, $entryID)
+{
     global $con, $insertQueries;
     $query = $con->prepare($insertQueries['spaceUse']);
-    $query->bind_param('iiiiiii', $entryID, $space['spaceID'], 
-        $space['groups'], $space['alone'], $space['individual'], $space['whiteboard'], $space['computers']);
+    $query->bind_param('iiiiiiii', $entryID, $space['spaceID'],
+        $space['groups'], $space['alone'], $space['individual'], $space['whiteboard'], $space['computers'], $space['noise']);
     $query->execute();
 }
 
@@ -104,15 +106,37 @@ function insertSpaceUse($space, $entryID){
  * @param Array $space representation of a space
  * @param Integer $entryID id of the entry
  */
-function insertSpaceTraffic($space, $entryID){
+function insertSpaceTraffic($space, $entryID)
+{
     global $con, $insertQueries;
-    echo $space['traffic'] . "\n";
-    echo $entryID . "\n";
-    echo $space['spaceID'] . "\n";
-    echo $space['noise'] . "\n";
     $query = $con->prepare($insertQueries['traffic']);
-    print_r($con);
-    $query->bind_param('iiiis', $space['traffic'], $entryID, $space['spaceID'], $space['noise'], $space['comments']);
+    $query->bind_param('iiis', $space['traffic'], $entryID, $space['spaceID'], $space['comments']);
     $query->execute();
 }
+
 ?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GVSU MIP Library Traffic</title>
+    <!-- <link rel="stylesheet" type="text/css" href="http://gvsu.edu/cms3/assets/741ECAAE-BD54-A816-71DAF591D1D7955C/libui.css" /> -->
+    <link rel="stylesheet" type="text/css" href="css/styles.css"/>
+</head>
+<body>
+<h1>GVSU MIP Library Traffic</h1>
+<?php
+if ($errors) {
+    foreach ($errors as $error => $message) {
+        echo "<div class='lib-error'><p>" . $message . "</p></div>";
+    }
+} else {
+    echo "<h2>Succesfully added data to database.</h2>";
+    echo "<h4><a href='index.php'>Go back</a></h4>";
+}
+?>
+<script src="//code.jquery.com/jquery.js"></script>
+<script src="js/jquery.validate.js"></script>
+<script src="js/scripts.js"></script>
+</body>
+</html>

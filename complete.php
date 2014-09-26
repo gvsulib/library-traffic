@@ -7,10 +7,10 @@
 	<link rel="stylesheet" type="text/css" href="css/styles.css" />
 </head>
 <body>
-<h1>GVSU MIP Library Traffic <small><a href="index.php">Space Use Form</a></small></h1>
-	<?php
-	displayForm("traffic");
-	?>
+	<h1>GVSU MIP Library Traffic</h1>
+	<h2>
+        Traffic data logged successfully.
+	</h2>
 	<script src="//code.jquery.com/jquery.js"></script>
 	<script src="js/jquery.validate.js"></script>
 	<script src="js/scripts.js"></script>

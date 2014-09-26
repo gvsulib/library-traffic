@@ -3,32 +3,36 @@
 /**
  * Function to render the HTML form.
  */
-function displayForm(){
+function displayForm($whichForm){
 	$areas = getAreasFromDb();
 	echo "<div class='lib-form'>";
-	echo "<form action='processForm.php' method='POST'>" .
-	"<h4>Initials</h4>" .
-	"<input type='text' size='3' maxlength='3' name='initials' style='width:10%'>";
+	echo "<form action='processForm.php' method='POST'>";
+
 	foreach($areas as $spaceID => $space){
 		echo "<div class='space-wrapper'>";
 		echo "<h2>Zone: " . $space['name'] . "</h2>";
 		echo "<div class='space-inputs'>";		
 
 		echo getInputsForSpaceAndType($spaceID, 'traffic');
-		echo getInputsForSpaceAndType($spaceID, 'noise');
-		if ($areas[$spaceID]['computers']){
-			echo getInputsForComputer($spaceID);
-		}
-		if ($areas[$spaceID]['collab']){
-			echo getInputsForCollab($spaceID);
-		}
-		if ($areas[$spaceID]['whiteboard']){
-			echo getInputsForWhiteboard($spaceID);
-		}
+        if ($whichForm == "spaceUse") {
+            echo getInputsForSpaceAndType($spaceID, 'noise');
+            if ($areas[$spaceID]['computers']) {
+                echo getInputsForComputer($spaceID);
+            }
+            if ($areas[$spaceID]['collab']) {
+                echo getInputsForCollab($spaceID);
+            }
+            if ($areas[$spaceID]['whiteboard']) {
+                echo getInputsForWhiteboard($spaceID);
+            }
+        }
 		echo getInputForComments($spaceID);
 		echo "</div>";
 		echo "</div>";
 	}
+    echo "<input type='hidden' name='formType' value='" . $whichForm . "'/>" .
+        "<h4>Initials</h4>" .
+        "<input type='text' size='3' maxlength='3' name='initials' style='width:10%'>";
 	echo "<input type='submit' value='Submit'></input>";
 	echo "</form>";
 	echo "</div>";
