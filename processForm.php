@@ -54,7 +54,6 @@ function getSpaceFromData($data, $spaceID)
     $space['computers'] = 0; //default
     if ($spaceID < count($data) - 1) {
         foreach ($data[$spaceID] as $field => $value) {
-            echo $spaceID;
             if (count($value) == 1) { //not collab
                 if ($field == 'computers') {
                     $value = $value ? 1 : 0;
