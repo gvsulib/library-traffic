@@ -14,10 +14,10 @@ if (!$_POST){
     $errors[] = $errorMessages['badForm'];
 }
 else{
-    foreach($_POST as $222222field => $value){
+    foreach($_POST as $field => $value){
         $fieldInfo = explode("_", $field);
         switch (count($fieldInfo)){
-            case 1: //initials
+            case 1: //initials, formType
                 $data[$field] = $value;
                 break;
             case 2: //data that isn't collab
@@ -35,6 +35,7 @@ else{
 processFormData($data);
 function processFormData($data){
     global $con, $insertQueries;
+    $formType = $data['formType'];
     $entryID = getEntryID($data['initials']);
     for ($i = 1; $i < count($data); $i++){
         $space = getSpaceFromData($data, $i);
