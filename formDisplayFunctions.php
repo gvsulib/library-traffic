@@ -9,7 +9,7 @@ function displayForm($whichForm){
 	echo "<form action='processForm.php' method='POST'>";
 
 	foreach($areas as $spaceID => $space){
-		echo "<div class='space-wrapper'>";
+		echo "<div class='space-wrapper' id='" . $spaceID . "'>";
 		echo "<h2>Zone: " . $space['name'] . "</h2>";
 		echo "<div class='space-inputs'>";		
 
@@ -33,7 +33,7 @@ function displayForm($whichForm){
     echo "<input type='hidden' name='formType' value='" . $whichForm . "'/>" .
         "<h4>Initials</h4>" .
         "<input type='text' size='3' maxlength='3' name='initials' style='width:10%'>";
-	echo "<input type='submit' value='Submit'></input>";
+	echo "<input type='submit' value='Submit' />";
 	echo "</form>";
 	echo "</div>";
 }

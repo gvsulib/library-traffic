@@ -8,11 +8,13 @@
 </head>
 <body>
 <h1>GVSU MIP Library Traffic <small><a href="index.php">Space Use Form</a></small></h1>
+<h2><?php checkIP();?></h2>
 	<?php
 	displayForm("traffic");
 	?>
 	<script src="//code.jquery.com/jquery.js"></script>
 	<script src="js/jquery.validate.js"></script>
+    <script src="js/jquery.swap.js"></script>
 	<script src="js/scripts.js"></script>
 </body>
 </html>
