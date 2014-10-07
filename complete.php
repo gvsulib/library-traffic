@@ -11,8 +11,5 @@
 	<h2>
         Traffic data logged successfully.
 	</h2>
-	<script src="//code.jquery.com/jquery.js"></script>
-	<script src="js/jquery.validate.js"></script>
-	<script src="js/scripts.js"></script>
 </body>
 </html>
