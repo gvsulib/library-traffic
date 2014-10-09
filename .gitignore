@@ -1,3 +1,4 @@
 *.sql
 .idea*
 connection.php
+password.php

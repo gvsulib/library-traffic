@@ -8,7 +8,6 @@
 </head>
 <body>
 	<h1>GVSU MIP Library Use <small><a href="traffic.php">Traffic Form</a></small></h1>
-    <h2><?php checkIP()?></h2>
 
 	<?php
 	displayForm("spaceUse");
