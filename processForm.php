@@ -43,7 +43,6 @@ function processFormData($data)
     for ($i = 1; $i < count($data)-1; $i++) {
         $space = getSpaceFromData($data, $i);
         if ($formType == "spaceUse" && $space['use']) {
-            echo "spaceUse";
             insertSpaceUse($space, $entryID);
         }
         insertSpaceTraffic($space, $entryID);
@@ -102,7 +101,6 @@ function insertSpaceUse($space, $entryID)
     $query = $con->prepare($insertQueries['spaceUse']);
     $query->bind_param('iiiiiiii', $entryID, $space['spaceID'],
         $space['groups'], $space['alone'], $space['individual'], $space['whiteboard'], $space['computers'], $space['noise']);
-    print_r($space);
     if (!$query->execute()){
         $errors[] = $errorMessages['spaceUse'];
         $errors[] = $con->error;
