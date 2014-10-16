@@ -1,6 +1,8 @@
 <?php
 include 'includes.php';
-$errorMessages['badForm'] = "Error retreiving data from form. Call Jon.";
+$errorMessages['badForm'] = "Error retrieving data from form. Call Jon.";
+$errorMessages['spaceUse'] = "Error with space use";
+$errorMessages['traffic'] = "Error with traffic";
 
 $insertQueries['entry'] = "INSERT INTO entries (time, `use`, entryID, initials) VALUES (?, ?, NULL, ?);";
 $insertQueries['spaceUse'] = "INSERT INTO spaceuse (entryID,spaceID, groups, alone, individual, whiteboard, computers, noise) " .
@@ -31,15 +33,17 @@ if (!$_POST) {
         }
     }
 }
+
 processFormData($data);
 function processFormData($data)
 {
-    global $con, $insertQueries;
+    global $con, $insertQueries, $errors, $errorMessages;
     $formType = $data['formType'];
     $entryID = getEntryID($data['initials'], $formType == 'spaceUse');
-    for ($i = 1; $i < count($data); $i++) {
+    for ($i = 1; $i < count($data)-1; $i++) {
         $space = getSpaceFromData($data, $i);
-        if ($formType == "spaceUse" && $space['use'] === true) {
+        if ($formType == "spaceUse" && $space['use']) {
+            echo "spaceUse";
             insertSpaceUse($space, $entryID);
         }
         insertSpaceTraffic($space, $entryID);
@@ -52,7 +56,7 @@ function getSpaceFromData($data, $spaceID)
     $space['spaceID'] = $spaceID;
     $space['whiteboard'] = 0; //default
     $space['computers'] = 0; //default
-    if ($spaceID < count($data) - 1) {
+    if ($spaceID <= count($data) - 1) {
         foreach ($data[$spaceID] as $field => $value) {
             if (count($value) == 1) { //not collab
                 if ($field == 'computers') {
@@ -60,6 +64,7 @@ function getSpaceFromData($data, $spaceID)
                 }
                 $space[$field] = $value;
             } else {
+                $space['use'] = true;
                 foreach ($value as $collab => $collabValue) {
                     $space[$collab] = $collabValue;
                 }
@@ -82,7 +87,6 @@ function getEntryID($initials, $use)
     $query = $con->prepare($insertQueries['entry']);
     $query->bind_param('sis', $time, $use, $initials);
     $query->execute();
-    $query->execute();
     return $con->insert_id;
 }
 
@@ -93,11 +97,17 @@ function getEntryID($initials, $use)
  */
 function insertSpaceUse($space, $entryID)
 {
-    global $con, $insertQueries;
+
+    global $con, $insertQueries, $errors, $errorMessages;
     $query = $con->prepare($insertQueries['spaceUse']);
     $query->bind_param('iiiiiiii', $entryID, $space['spaceID'],
         $space['groups'], $space['alone'], $space['individual'], $space['whiteboard'], $space['computers'], $space['noise']);
-    $query->execute();
+    print_r($space);
+    if (!$query->execute()){
+        $errors[] = $errorMessages['spaceUse'];
+        $errors[] = $con->error;
+        $errors[] = var_dump($space);
+    }
 }
 
 /**
@@ -107,10 +117,14 @@ function insertSpaceUse($space, $entryID)
  */
 function insertSpaceTraffic($space, $entryID)
 {
-    global $con, $insertQueries;
+    global $con, $insertQueries, $errors, $errorMessages;
     $query = $con->prepare($insertQueries['traffic']);
     $query->bind_param('iiis', $space['traffic'], $entryID, $space['spaceID'], $space['comments']);
-    $query->execute();
+    if (!$query->execute()){
+        $errors[] = $errorMessages['traffic'];
+        $errors[] = $con->error;
+        $errors[] = var_dump($space);
+    }
 }
 
 ?>
