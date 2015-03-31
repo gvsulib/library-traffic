@@ -24,5 +24,5 @@ LIMIT 1
 $results = $con->query($query);
 $r = $results->fetch_assoc();
 $r['id'] = (int) $r['id'];
-echo json_encode($r);
+echo json_encode($r,64); //JSON_UNESCAPED_SLASHES
 ?>

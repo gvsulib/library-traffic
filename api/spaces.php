@@ -16,5 +16,5 @@ while ($space = $results->fetch_assoc()){
 	$space['meta']['url'] = "space/" . $space['id'];
 	$spaces[] = $space;
 }
-echo json_encode($spaces,JSON_UNESCAPED_SLASHES);
+echo json_encode($spaces,64); //JSON_UNESCAPED_SLASHES
 ?>
