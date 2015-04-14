@@ -82,7 +82,7 @@ function getEntryID($initials, $use)
 {
     global $con, $insertQueries;
     $use = $use ? 1 : 0;
-    $time = date('Y-m-d h:i:s');
+    $time = date('Y-m-d H:i:s');
     $query = $con->prepare($insertQueries['entry']);
     $query->bind_param('sis', $time, $use, $initials);
     $query->execute();
