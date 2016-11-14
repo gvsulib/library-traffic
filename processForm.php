@@ -1,6 +1,6 @@
 <?php
 include 'includes.php';
-$errorMessages['badForm'] = "Error retrieving data from form. Call Jon.";
+$errorMessages['badForm'] = "Error retrieving data from form. Try reloading the form. If that does not fix the problem, report it on the library systems status page.";
 $errorMessages['spaceUse'] = "Error with space use";
 $errorMessages['traffic'] = "Error with traffic";
 

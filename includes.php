@@ -1,5 +1,7 @@
 <?php
 include 'connection.php'; //database connection
+
+
 function checkIP(){
     $db = getConnection();
     $ip = $_SERVER['REMOTE_ADDR'];
@@ -21,6 +23,8 @@ function checkIP(){
     }
 }
 checkIP();
+
+
 session_start();
 if ($_GET['logout']){
 	$_SESSION = array();
