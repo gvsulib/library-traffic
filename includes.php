@@ -25,12 +25,12 @@ function checkIP(){
 checkIP();
 
 
-session_start();
+
 if ($_GET['logout']){
-	$_SESSION = array();
-	session_destroy();
+	
+	$_COOKIE['loggedIn'] = 'false';
 }
-if ($_SESSION['loggedIn'] != true){
+if ($_COOKIE['loggedIn'] == 'false'){
 	header('location: login.php');
 }
 

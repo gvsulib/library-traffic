@@ -1,13 +1,24 @@
-<?php
-session_start();
+<?
+
+if(!isset($_COOKIE['loggedIn'])) {
+    setcookie('loggedIn', 'false', time() + (86400 * 30), "/");
+    $_COOKIE['loggedIn'] = 'false';
+}
+
 include 'password.php';
-if ($_SESSION['loggedIn'] == true){
-	header('location: index.php');
+
+//echo $_COOKIE['loggedIn'];
+
+//echo var_dump($_POST);
+
+if ($_COOKIE['loggedIn'] == 'true'){
+	
+	header('Location: index.php');
 }
 if (isset($_POST['password'])) {
-	if (sha1($_POST['password']) == $password){
-		$_SESSION['loggedIn'] = true;
-		header('location: index.php');
+	if (sha1($_POST['password']) == $pass){
+		setcookie('loggedIn', 'true', time() + (86400 * 30), "/");
+		header('Location: index.php');
 	} else {
 		$error = "Invalid password.";
 	}
@@ -24,14 +35,14 @@ if (isset($_POST['password'])) {
 	</style>
 </head>
 <body>
-	<form action='login.php' method="POST">
-		<div style="margin: 0 auto;text-align: center;width:500px">
-			<h2>Enter password:</h2>
-			<h3 style="color:red;"><?php echo $error;?></h3>
-			<input name="password" type="text">
-			<input type="submit" value="Submit">
-		</div>
+<div style="margin: 0 auto;text-align: center;width:500px">
+	<form action='' method="POST">
+			<label for"password">Enter password:</label>
+			<input name="password" type="password" required>
+		<input type="submit" value="Submit">		
 	</form>
+<div>
+<span style="color:red;"><?php echo $error;?></span>
 
 </body>
 </html>	
