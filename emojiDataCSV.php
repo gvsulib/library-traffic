@@ -2,7 +2,7 @@
 
 include 'connection.php'; //database connection
 
-$query="SELECT emotion_id, COUNT(emotion_id) CASE when emotion_id = 1 then  FROM feedback_response GROUP BY emotion_id";
+$query="SELECT emotion_id, COUNT(emotion_id) FROM feedback_response GROUP BY emotion_id";
 
 $stmt = $con->prepare($query);
 
