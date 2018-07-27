@@ -12,7 +12,7 @@ function convertTime($str) {
 
 if (isset($_POST["submit"])) {
     $date1 = convertTime($_POST["start"]) . " 00:00:00";
-    $date2 = convertTime($_POST["end"]) . " 24:60:60";
+    $date2 = convertTime($_POST["end"]) . " 23:59:59";
 
     $query="SELECT emotion_id, COUNT(emotion_id), (COUNT(emotion_id) * 100 /(SELECT COUNT(*) FROM feedback_response WHERE timestamp >= \"$date1\" AND timestamp <= \"$date2\")) as percent FROM feedback_response WHERE timestamp >= \"$date1\" AND timestamp <= \"$date2\" GROUP BY emotion_id";
    
