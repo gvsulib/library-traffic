@@ -29,6 +29,18 @@ if (isset($_POST["submit"])) {
         $CSVFile = fopen("emojiData.csv", "w");
 
         while ($stmt->fetch()) {
+            switch ($emotion_id) {
+                case 1: $emotion_id = "really bad"; break;
+                case 2: $emotion_id = "bad"; break;
+                case 3: $emotion_id = "neutral"; break;
+                case 4: $emotion_id = "good"; break;
+                case 5: $emotion_id = "really good"; break;
+
+
+
+            }
+
+
             fputcsv($CSVFile, array($emotion_id, $count, $percent));
 
         }
