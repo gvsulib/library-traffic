@@ -65,6 +65,9 @@ if (isset($_POST["submit"])) {
 <BODY>
 <h1>Download Emoji Stats</h1>
 <form name="selectdates" method="POST" action="">
+
+<P>No emoji data available before 2015-06-05</P>
+
 <P>
 <input type="date" <?php if (isset($_POST["start"])) {echo "value=\"" . $_POST["start"] . "\"";} ?> name="start" /> Start Date
 <P>
