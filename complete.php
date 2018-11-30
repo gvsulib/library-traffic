@@ -1,4 +1,4 @@
-<?php include 'includes.php'; ?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,5 +11,7 @@
 	<h2>
         Traffic data logged successfully.
 	</h2>
+
+	<a href="traffic.php">Back to the form</a>
 </body>
 </html>

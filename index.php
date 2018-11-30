@@ -1,20 +1,48 @@
-<?php include 'includes.php'; ?>
+<?
+
+if(!isset($_COOKIE['loggedIn'])) {
+    setcookie('loggedIn', 'false', time() + (86400 * 30), "/");
+    $_COOKIE['loggedIn'] = 'false';
+}
+
+include 'password.php';
+
+//echo $_COOKIE['loggedIn'];
+
+//echo var_dump($_POST);
+
+if ($_COOKIE['loggedIn'] == 'true'){
+	header('Location: traffic.php');
+	
+}
+if (isset($_POST['password'])) {
+	if ($_POST['password'] == $pass){
+		setcookie('loggedIn', 'true', time() + (86400 * 30), "/");
+		header('Location: index.php');
+	} else {
+		$error = "Invalid password.";
+	}
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
 	<title>GVSU MIP Library Traffic</title>
-	<!-- <link rel="stylesheet" type="text/css" href="http://gvsu.edu/cms3/assets/741ECAAE-BD54-A816-71DAF591D1D7955C/libui.css" /> -->
-	<link rel="stylesheet" type="text/css" href="css/styles.css" />
+	<style type="text/css">
+	html,body{
+		font-family: Helvetica;
+	}
+	</style>
 </head>
 <body>
-	<h1>GVSU MIP Library Use <small><a href="traffic.php">Traffic Form</a></small></h1>
+<div style="margin: 0 auto;text-align: center;width:500px">
+	<form action='' method="POST">
+			<label for="password">Enter password:</label>
+			<input name="password" type="password" required>
+		<input type="submit" value="Submit">		
+	</form>
+<div>
+<span style="color:red;"><?php if (isset($error)) {echo $error;}?></span>
 
-	<?php
-	displayForm("spaceUse");
-	?>
-	<script src="//code.jquery.com/jquery.js"></script>
-	<script src="js/jquery.validate.js"></script>
-    <script src="js/jquery.swap.js"></script>
-	<script src="js/scripts.js"></script>
 </body>
-</html>
+</html>	
