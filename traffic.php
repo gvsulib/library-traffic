@@ -48,7 +48,7 @@ if (isset($_POST["submit"])) {
 
 	$json = json_encode($reformatted);
 
-	$curl = curl_init("http://localhost:8888/trafficapi/traffic/");
+	$curl = curl_init("http://prod.library.gvsu.edu/trafficapi/traffic/");
 
 	curl_setopt($curl, CURLOPT_POST, 1);
 	curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
