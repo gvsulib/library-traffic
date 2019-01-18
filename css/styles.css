@@ -21,10 +21,11 @@ label.error {
 textarea{
 	min-width: 400px;
 }
-
-.100 {
-	width: 100px;
+.space-wrapper {
+	margin-top: 50px;
 }
+
+
 /**
 * This, for some reason, is required to show the select boxes at a more clickable height in (mobile) Safari and Chrome.
 */
